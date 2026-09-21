@@ -2,13 +2,12 @@
 
 Public or shareable AI workflow assets.
 
-This repo is for public skills and non-private opencode/OpenClaw assets. Tool config stays in dotfiles; this repo only provides reusable AI assets that can be stowed into the home directory.
+This repo is for public skills and non-private opencode assets. Tool config stays in dotfiles; this repo only provides reusable AI assets that can be stowed into the home directory.
 
 ## Layout
 
 - `general/` installs shared assets under `~/.agents/` for tools that support the Agent Skills layout.
 - `opencode/` installs opencode-specific assets under `~/.config/opencode/`.
-- `openclaw/` is reserved for OpenClaw-specific assets.
 
 ## Install
 
