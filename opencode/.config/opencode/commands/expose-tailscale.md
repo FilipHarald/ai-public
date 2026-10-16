@@ -1,0 +1,15 @@
+---
+description: Host the current project privately on Tailscale and return its verified MagicDNS URL
+---
+
+Make the current session's project available over Tailscale, then give me its working MagicDNS URL. Act on the current project directory, not the directory containing this command definition.
+
+1. Read the project's instructions, documentation, and run scripts. Identify the intended web app, its startup command, and required services. Reuse an existing healthy instance only after confirming it belongs to this project. If multiple apps are equally plausible, ask which one to host. Do not expose the repository directory as a static file server unless it is explicitly the intended public web root.
+2. Check that Tailscale is installed, connected, and has a MagicDNS hostname. Inspect `tailscale serve --help`, `tailscale serve status`, and `tailscale status --json` to use the installed CLI's actual syntax and discover existing routes. If login, HTTPS enablement, permissions, or missing secrets require user action, explain the exact blocker; do not claim success or bypass access controls.
+3. Start the app using the project's normal tooling, installing dependencies or building when necessary. Prefer a loopback listener and an unused local port. Keep the process running beyond this tool call/session using an appropriate existing supervisor or a detached process with logs and a recorded PID. Never kill an unrelated process or change committed project configuration unnecessarily. Check its local HTTP response and logs before proceeding.
+4. Expose the healthy local HTTP service using persistent/background **Tailscale Serve**, private to the tailnet. Never enable Funnel or public internet exposure. Preserve existing Serve mappings: reuse a matching project mapping, otherwise choose an unused HTTPS listener/port or another safe non-conflicting mapping. Do not reset Serve, overwrite another project's route, or change tailnet ACLs. If a conflicting mapping must be changed, ask first. Prefer a dedicated HTTPS listener over a subpath when the app assumes it lives at `/`.
+5. Use the actual MagicDNS hostname and configured HTTPS listener to construct the URL, including a non-default port or path when applicable. Verify Serve status and request that exact URL with certificate validation enabled. Check that the response is the intended app, not merely any HTTP response; do not treat a 5xx, wrong app, or proxy error as success. If framework host/origin restrictions block it, use the narrowest project-supported runtime setting for this exact hostname; never broadly disable host validation. If end-to-end verification cannot be completed, clearly report that instead of saying it is up.
+
+When verified, lead with the clickable MagicDNS URL. Briefly report the local port, how the app stays running, log location, and exact commands to stop this app and remove only its Serve mapping. Note that access requires Tailscale connectivity and suitable tailnet permissions. Do not promise reachability from another device unless actually tested there.
+
+Additional user guidance (for example, app, local port, or preferred HTTPS port): $ARGUMENTS
